@@ -9,6 +9,7 @@ const ASSETS = [
   '/src/js/player.js',
   '/src/js/board.js',
   '/src/js/ship.js',
+  '/src/js/placeShips.js',
   '/icons/icon-192x192.png',
   '/icons/icon-512x512.png'
 ];
