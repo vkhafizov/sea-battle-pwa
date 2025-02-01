@@ -1,4 +1,5 @@
 import { Ship } from './ship.js';
+import { placeShips } from './placeShips.js';
 
 export class Player {
     constructor() {
@@ -16,26 +17,7 @@ export class Player {
     }
 
     placeShips(board) {
-        for (const ship of this.ships) {
-            let placed = false;
-            let attempts = 0; // Ограничим количество попыток
-
-            while (!placed && attempts < 100) {
-                try {
-                    const row = Math.floor(Math.random() * 10);
-                    const col = Math.floor(Math.random() * 10);
-                    const orientation = Math.random() < 0.5 ? 'horizontal' : 'vertical';
-                    ship.place(row, col, orientation, board);
-                    placed = true;
-                } catch (error) {
-                    attempts++; // Увеличиваем счетчик попыток
-                }
-            }
-
-            if (!placed) {
-                console.error(`Не удалось разместить корабль длиной ${ship.length}`);
-            }
-        }
+        placeShips(this.ships, board);
     }
 
     receiveAttack(row, col) {
