@@ -1,15 +1,15 @@
 {
   "short_name": "Морской бой",
-  "name": "Морской бой - Игра против бота",
+  "name": "Морской бой",
   "description": "Классическая игра 'Морской бой' для игры против бота.",
   "icons": [
     {
-      "src": "icons/icon-192x192.png",
+      "src": "/icons/icon-192x192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "icons/icon-512x512.png",
+      "src": "/icons/icon-512x512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
