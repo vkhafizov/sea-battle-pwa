@@ -7,51 +7,48 @@ export class Ship {
     }
 
     place(startRow, startCol, orientation, board) {
-        this.coordinates = []; // Очищаем предыдущие координаты
+        const newCoordinates = [];
 
         for (let i = 0; i < this.length; i++) {
-            let row, col;
+            const row = orientation === 'horizontal' ? startRow : startRow + i;
+            const col = orientation === 'horizontal' ? startCol + i : startCol;
 
-            if (orientation === 'horizontal') {
-                row = startRow;
-                col = startCol + i;
-            } else if (orientation === 'vertical') {
-                row = startRow + i;
-                col = startCol;
-            } else {
-                throw new Error('Неправильная ориентация корабля');
-            }
-
-            // Проверка на выход за границы поля
             if (row < 0 || row >= 10 || col < 0 || col >= 10) {
                 throw new Error('Корабль выходит за пределы поля');
             }
 
-            // Проверка на пересечение с другими кораблями
             if (board.isCellOccupied(row, col)) {
                 throw new Error('Корабль пересекается с другим кораблем');
             }
 
-            this.coordinates.push({ row, col });
+            newCoordinates.push({ row, col, isHit: false });
         }
+
+        this.coordinates = newCoordinates;
 
         // Размещаем корабль на поле
         for (const coord of this.coordinates) {
             board.placeShip(coord.row, coord.col, this);
         }
 
+        if (!board.ships.includes(this)) {
+            board.ships.push(this);
+        }
+
         this.isPlaced = true;
     }
 
     isHit(row, col) {
-        const isHit = this.coordinates.some(coord => coord.row === row && coord.col === col);
-        if (isHit) {
+        const hitCoord = this.coordinates.find(coord => coord.row === row && coord.col === col);
+        if (hitCoord && !hitCoord.isHit) {
+            hitCoord.isHit = true;
             this.hits++;
+            return true;
         }
-        return isHit;
+        return false;
     }
 
     isSunk() {
-        return this.hits >= this.length;
+        return this.coordinates.every(coord => coord.isHit);
     }
 }
