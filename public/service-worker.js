@@ -2,7 +2,7 @@ const CACHE_NAME = 'sea-battle-v1';
 const ASSETS = [
   '/',
   '/index.html',
-  '/styles/main.css',
+  '/public/styles/main.css',
   '/js/app.js',
   '/js/game.js',
   '/js/bot.js',
