@@ -4,20 +4,16 @@ import { Board } from './board.js';
 
 export class Game {
     constructor() {
-        // Инициализация игрока и бота
         this.player = new Player();
         this.bot = new Bot();
 
-        // Инициализация игровых полей
         this.playerBoard = new Board('player-board');
         this.botBoard = new Board('bot-board');
 
-        // Состояние игры
         this.isGameOver = false;
-        this.currentPlayer = 'player'; // Игрок ходит первым
+        this.currentPlayer = 'player';
     }
 
-    // Запуск игры
     start() {
         console.log('Игра началась!');
 
@@ -33,7 +29,6 @@ export class Game {
         this.startPlayerTurn();
     }
 
-    // Ход игрока
     startPlayerTurn() {
         if (this.isGameOver) return;
 
@@ -43,7 +38,6 @@ export class Game {
         this.botBoard.element.addEventListener('click', this.handlePlayerClick.bind(this));
     }
 
-    // Обработка клика игрока
     handlePlayerClick(event) {
         if (this.isGameOver) return;
 
@@ -70,7 +64,6 @@ export class Game {
         }
     }
 
-    // Ход бота
     startBotTurn() {
         if (this.isGameOver) return;
 
@@ -98,7 +91,6 @@ export class Game {
         }
     }
 
-    // Завершение игры
     endGame(winner) {
         this.isGameOver = true;
         console.log(`Игра окончена. Победитель: ${winner}`);
