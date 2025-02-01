@@ -48,21 +48,23 @@ export class Board {
     }
 
     render() {
-        for (let row = 0; row < 10; row++) {
-            for (let col = 0; col < 10; col++) {
-                const cell = this.cells[row][col];
-                cell.className = '';
+  for (let row = 0; row < 10; row++) {
+    for (let col = 0; col < 10; col++) {
+      const cell = this.cells[row][col];
+      cell.className = ''; // Сбрасываем классы
 
-                if (this.isCellOccupied(row, col)) {
-                    cell.classList.add('ship');
-                }
+      // Если клетка принадлежит кораблю и не поражена — добавляем класс `ship`
+      if (this.isCellOccupied(row, col) && !cell.classList.contains('hit')) {
+        cell.classList.add('ship');
+      }
 
-                if (cell.classList.contains('hit')) {
-                    cell.classList.add('hit');
-                } else if (cell.classList.contains('miss')) {
-                    cell.classList.add('miss');
-                }
-            }
-        }
+      // Добавляем классы для попаданий и промахов
+      if (cell.classList.contains('hit')) {
+        cell.classList.add('hit');
+      } else if (cell.classList.contains('miss')) {
+        cell.classList.add('miss');
+      }
     }
+  }
+}
 }
