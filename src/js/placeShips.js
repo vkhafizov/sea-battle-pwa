@@ -39,16 +39,25 @@ export function placeShips(ships, board) {
 
 // Проверяет, можно ли разместить корабль
 function canPlaceShip(ship, startRow, startCol, orientation, board) {
-    for (let i = 0; i < ship.length; i++) {
-        const row = orientation === 'horizontal' ? startRow : startRow + i;
-        const col = orientation === 'horizontal' ? startCol + i : startCol;
+  for (let i = 0; i < ship.length; i++) {
+    const row = orientation === 'horizontal' ? startRow : startRow + i;
+    const col = orientation === 'horizontal' ? startCol + i : startCol;
 
-        // Проверяем, что клетка не занята и не выходит за границы
-        if (row >= 10 || col >= 10 || board.isCellOccupied(row, col)) {
-            return false;
+    // Проверка выхода за границы
+    if (row >= 10 || col >= 10) return false;
+
+    // Проверка соседних клеток (чтобы корабли не касались друг друга)
+    for (let dr = -1; dr <= 1; dr++) {
+      for (let dc = -1; dc <= 1; dc++) {
+        const r = row + dr;
+        const c = col + dc;
+        if (r >= 0 && r < 10 && c >= 0 && c < 10 && board.isCellOccupied(r, c)) {
+          return false;
         }
+      }
     }
-    return true;
+  }
+  return true;
 }
 
 // Размещает корабль на поле
