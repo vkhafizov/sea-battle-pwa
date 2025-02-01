@@ -1,34 +1,38 @@
 export class Ship {
     constructor(length) {
-        this.length = length; // Длина корабля
-        this.hits = 0;        // Количество попаданий
-        this.coordinates = []; // Координаты корабля на поле
-        this.isPlaced = false; // Флаг, указывающий, размещен ли корабль
+        this.length = length;
+        this.hits = 0;
+        this.coordinates = [];
+        this.isPlaced = false;
     }
 
-    // Размещение корабля на поле
     place(startRow, startCol, orientation, board) {
         this.coordinates = []; // Очищаем предыдущие координаты
 
-        // Определяем координаты корабля в зависимости от ориентации
         for (let i = 0; i < this.length; i++) {
+            let row, col;
+
             if (orientation === 'horizontal') {
-                this.coordinates.push({ row: startRow, col: startCol + i });
+                row = startRow;
+                col = startCol + i;
             } else if (orientation === 'vertical') {
-                this.coordinates.push({ row: startRow + i, col: startCol });
+                row = startRow + i;
+                col = startCol;
+            } else {
+                throw new Error('Неправильная ориентация корабля');
             }
-        }
 
-        // Проверяем, что корабль не выходит за пределы поля
-        if (this.coordinates.some(coord => coord.row < 0 || coord.row >= 10 || coord.col < 0 || coord.col >= 10)) {
-            throw new Error('Корабль выходит за пределы поля');
-        }
+            // Проверка на выход за границы поля
+            if (row < 0 || row >= 10 || col < 0 || col >= 10) {
+                throw new Error('Корабль выходит за пределы поля');
+            }
 
-        // Проверяем, что корабль не пересекается с другими кораблями
-        for (const coord of this.coordinates) {
-            if (board.isCellOccupied(coord.row, coord.col)) {
+            // Проверка на пересечение с другими кораблями
+            if (board.isCellOccupied(row, col)) {
                 throw new Error('Корабль пересекается с другим кораблем');
             }
+
+            this.coordinates.push({ row, col });
         }
 
         // Размещаем корабль на поле
@@ -39,16 +43,14 @@ export class Ship {
         this.isPlaced = true;
     }
 
-    // Проверка, попал ли выстрел в корабль
     isHit(row, col) {
         const isHit = this.coordinates.some(coord => coord.row === row && coord.col === col);
         if (isHit) {
-            this.hits++; // Увеличиваем количество попаданий
+            this.hits++;
         }
         return isHit;
     }
 
-    // Проверка, потоплен ли корабль
     isSunk() {
         return this.hits >= this.length;
     }
