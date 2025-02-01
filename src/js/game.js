@@ -15,19 +15,18 @@ export class Game {
     }
 
     start() {
-        console.log('Игра началась!');
+  // Очищаем предыдущие поля
+  this.playerBoard.initialize();
+  this.botBoard.initialize();
 
-        // Размещение кораблей
-        this.player.placeShips(this.playerBoard);
-        this.bot.placeShips(this.botBoard);
+  // Размещаем корабли
+  this.player.placeShips(this.playerBoard);
+  this.bot.placeShips(this.botBoard);
 
-        // Отрисовка полей
-        this.playerBoard.render();
-        this.botBoard.render();
-
-        // Начало хода игрока
-        this.startPlayerTurn();
-    }
+  // Принудительная отрисовка
+  this.playerBoard.render();
+  this.botBoard.render();
+}
 
     startPlayerTurn() {
         if (this.isGameOver) return;
