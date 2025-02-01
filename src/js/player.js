@@ -23,19 +23,21 @@ export class Player {
 
     // Размещение кораблей на поле
     placeShips(board) {
-        // Временная реализация: размещаем корабли вручную
-        // В будущем можно добавить логику для автоматического или интерактивного размещения
-        this.ships[0].place(0, 0, 'horizontal', board); // Корабль длиной 4
-        this.ships[1].place(2, 2, 'vertical', board);   // Корабль длиной 3
-        this.ships[2].place(4, 5, 'horizontal', board); // Корабль длиной 3
-        this.ships[3].place(6, 0, 'vertical', board);   // Корабль длиной 2
-        this.ships[4].place(8, 3, 'horizontal', board); // Корабль длиной 2
-        this.ships[5].place(9, 7, 'vertical', board);   // Корабль длиной 2
-        this.ships[6].place(1, 9, 'horizontal', board); // Корабль длиной 1
-        this.ships[7].place(3, 7, 'horizontal', board); // Корабль длиной 1
-        this.ships[8].place(5, 9, 'horizontal', board); // Корабль длиной 1
-        this.ships[9].place(7, 9, 'horizontal', board); // Корабль длиной 1
+    for (const ship of this.ships) {
+        let placed = false;
+        while (!placed) {
+            try {
+                const row = Math.floor(Math.random() * 10);
+                const col = Math.floor(Math.random() * 10);
+                const orientation = Math.random() < 0.5 ? 'horizontal' : 'vertical';
+                ship.place(row, col, orientation, board);
+                placed = true;
+            } catch (error) {
+                // Если размещение не удалось, пробуем снова
+            }
+        }
     }
+}
 
     // Обработка выстрела бота
     receiveAttack(row, col) {
