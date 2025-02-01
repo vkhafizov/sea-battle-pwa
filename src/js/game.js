@@ -91,14 +91,9 @@ export class Game {
     }
 
     endGame(winner) {
-        this.isGameOver = true;
-        console.log(`Игра окончена. Победитель: ${winner}`);
-
-        // Отключаем обработчики кликов
-        this.botBoard.element.removeEventListener('click', this.handlePlayerClick);
-
-        // Выводим сообщение о победе
-        const messageElement = document.getElementById('message');
-        messageElement.textContent = winner === 'player' ? 'Вы выиграли!' : 'Бот выиграл!';
-    }
+  this.isGameOver = true;
+  this.botBoard.element.removeEventListener('click', this.handlePlayerClick); // Важная строка
+  const messageElement = document.getElementById('message');
+  messageElement.textContent = winner === 'player' ? 'Вы выиграли!' : 'Бот выиграл!';
+}
 }
