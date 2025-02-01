@@ -3,12 +3,12 @@ const ASSETS = [
   '/',
   '/index.html',
   '/public/styles/main.css',
-  '/js/app.js',
-  '/js/game.js',
-  '/js/bot.js',
-  '/js/player.js',
-  '/js/board.js',
-  '/js/ship.js',
+  '/src/js/app.js',
+  '/src/js/game.js',
+  '/src/js/bot.js',
+  '/src/js/player.js',
+  '/src/js/board.js',
+  '/src/js/ship.js',
   '/icons/icon-192x192.png',
   '/icons/icon-512x512.png'
 ];
