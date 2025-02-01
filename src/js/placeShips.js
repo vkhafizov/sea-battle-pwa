@@ -1,66 +1,67 @@
 export function placeShips(ships, board) {
-    const orientations = ['horizontal', 'vertical'];
+    // Жёстко заданные позиции кораблей
+    const predefinedPositions = [
+        { startRow: 0, startCol: 0, orientation: 'horizontal', length: 4 }, // 4-палубный
+        { startRow: 2, startCol: 0, orientation: 'horizontal', length: 3 }, // 3-палубный 1
+        { startRow: 4, startCol: 5, orientation: 'vertical', length: 3 },   // 3-палубный 2
+        { startRow: 6, startCol: 0, orientation: 'horizontal', length: 2 }, // 2-палубный 1
+        { startRow: 8, startCol: 3, orientation: 'horizontal', length: 2 }, // 2-палубный 2
+        { startRow: 5, startCol: 9, orientation: 'vertical', length: 2 },   // 2-палубный 3
+        { startRow: 9, startCol: 0, orientation: 'horizontal', length: 1 }, // 1-палубный 1
+        { startRow: 9, startCol: 2, orientation: 'horizontal', length: 1 }, // 1-палубный 2
+        { startRow: 9, startCol: 4, orientation: 'horizontal', length: 1 }, // 1-палубный 3
+        { startRow: 9, startCol: 6, orientation: 'horizontal', length: 1 }  // 1-палубный 4
+    ];
 
-    for (const ship of ships) {
-        let placed = false;
-        let attempts = 0;
+    if (ships.length !== predefinedPositions.length) {
+        console.error('Количество кораблей не совпадает с количеством позиций.');
+        return;
+    }
 
-        while (!placed && attempts < 1000) {
-            try {
-                // Выбираем случайную ориентацию
-                const orientation = orientations[Math.floor(Math.random() * 2)];
+    // Размещаем корабли по заранее определённым координатам
+    for (let i = 0; i < ships.length; i++) {
+        const ship = ships[i];
+        const position = predefinedPositions[i];
 
-                // Ограничиваем стартовую позицию, чтобы корабль не выходил за границы
-                const maxStartRow = orientation === 'horizontal' ? 10 : 10 - ship.length;
-                const maxStartCol = orientation === 'horizontal' ? 10 - ship.length : 10;
+        // Проверяем, подходит ли длина
+        if (ship.length !== position.length) {
+            console.error(`Ошибка: длина корабля №${i + 1} не соответствует заданной позиции.`);
+            continue;
+        }
 
-                // Выбираем случайную стартовую позицию
-                const startRow = Math.floor(Math.random() * maxStartRow);
-                const startCol = Math.floor(Math.random() * maxStartCol);
+        // Проверяем возможность размещения (на всякий случай)
+        if (canPlaceShip(ship, position.startRow, position.startCol, position.orientation, board)) {
+            placeShip(ship, position.startRow, position.startCol, position.orientation, board);
+            console.log(`Корабль №${i + 1} размещён на (${position.startRow}, ${position.startCol}) с ориентацией ${position.orientation}`);
+        } else {
+            console.error(`Не удалось разместить корабль №${i + 1} на (${position.startRow}, ${position.startCol}).`);
+        }
+    }
+}
 
-                // Проверяем, можно ли разместить корабль
-                if (canPlaceShip(ship, startRow, startCol, orientation, board)) {
-                    // Размещаем корабль
-                    placeShip(ship, startRow, startCol, orientation, board);
-                    placed = true;
+// Проверка возможности размещения
+function canPlaceShip(ship, startRow, startCol, orientation, board) {
+    for (let i = 0; i < ship.length; i++) {
+        const row = orientation === 'horizontal' ? startRow : startRow + i;
+        const col = orientation === 'horizontal' ? startCol + i : startCol;
+
+        if (row >= 10 || col >= 10) return false;
+
+        // Проверка на занятость и соседство
+        for (let dr = -1; dr <= 1; dr++) {
+            for (let dc = -1; dc <= 1; dc++) {
+                const r = row + dr;
+                const c = col + dc;
+                if (r >= 0 && r < 10 && c >= 0 && c < 10 && board.isCellOccupied(r, c)) {
+                    return false;
                 }
-            } catch (error) {
-                console.error(error);
-            } finally {
-                attempts++;
             }
         }
-
-        if (!placed) {
-            console.error(`Не удалось разместить корабль длиной ${ship.length}`);
-        }
     }
+    return true;
 }
 
-// Проверяет, можно ли разместить корабль
-function canPlaceShip(ship, startRow, startCol, orientation, board) {
-  for (let i = 0; i < ship.length; i++) {
-    const row = orientation === 'horizontal' ? startRow : startRow + i;
-    const col = orientation === 'horizontal' ? startCol + i : startCol;
-
-    // Проверка выхода за границы
-    if (row >= 10 || col >= 10) return false;
-
-    // Проверка соседних клеток (чтобы корабли не касались друг друга)
-    for (let dr = -1; dr <= 1; dr++) {
-      for (let dc = -1; dc <= 1; dc++) {
-        const r = row + dr;
-        const c = col + dc;
-        if (r >= 0 && r < 10 && c >= 0 && c < 10 && board.isCellOccupied(r, c)) {
-          return false;
-        }
-      }
-    }
-  }
-  return true;
-}
-
-// Размещает корабль на поле
+// Размещение корабля
 function placeShip(ship, startRow, startCol, orientation, board) {
     ship.coordinates = [];
 
