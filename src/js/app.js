@@ -1,10 +1,20 @@
 import { Game } from './game.js';
 
-// Инициализация приложения
 document.addEventListener('DOMContentLoaded', () => {
-    // Создаем экземпляр игры
-    const game = new Game();
+    const startButton = document.getElementById('start-button');
+    const gameContainer = document.querySelector('.game-container');
+    const messageElement = document.getElementById('message');
 
-    // Запускаем игру
-    game.start();
+    let game;
+
+    startButton.addEventListener('click', () => {
+        // Скрываем кнопку и показываем игровое поле
+        startButton.style.display = 'none';
+        gameContainer.style.display = 'flex';
+        messageElement.textContent = '';
+
+        // Создаем новую игру
+        game = new Game();
+        game.start();
+    });
 });
